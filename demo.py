@@ -1,4 +1,3 @@
-
 from src.pipline.training_pipeline import TrainPipeline
 
 pipline = TrainPipeline()
