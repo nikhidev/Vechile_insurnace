@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Insurance Prediction</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Vehicle Insurance Prediction</h1>
+
+        <form id="predict-form" method="post" action="/">
+            <div>
+                <label for="Gender">Gender</label>
+                <select id="Gender" name="Gender" required>
+                    <option value="" disabled selected>Choose</option>
+                    <option value="1">Male</option>
+                    <option value="0">Female</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="Age">Age (years)</label>
+                <input type="number" id="Age" name="Age" min="18" max="100" required>
+            </div>
+
+            <div>
+                <label for="Driving_License">Driving license</label>
+                <select id="Driving_License" name="Driving_License" required>
+                    <option value="" disabled selected>Choose</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="Region_Code">Region code</label>
+                <input type="number" step="any" min="0" id="Region_Code" name="Region_Code" required>
+            </div>
+
+            <div>
+                <label for="Previously_Insured">Previously insured</label>
+                <select id="Previously_Insured" name="Previously_Insured" required>
+                    <option value="" disabled selected>Choose</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="Annual_Premium">Annual premium</label>
+                <input type="number" step="any" min="0" id="Annual_Premium" name="Annual_Premium" required>
+            </div>
+
+            <div>
+                <label for="Policy_Sales_Channel">Policy sales channel</label>
+                <input type="number" step="any" min="0" id="Policy_Sales_Channel" name="Policy_Sales_Channel" required>
+            </div>
+
+            <div>
+                <label for="Vintage">Vintage (days as a customer)</label>
+                <input type="number" min="0" id="Vintage" name="Vintage" required>
+            </div>
+
+            <div>
+                <label for="vehicle_age">Vehicle age</label>
+                <select id="vehicle_age" required>
+                    <option value="" disabled selected>Choose</option>
+                    <option value="lt1">Less than 1 year</option>
+                    <option value="mid">1 to 2 years</option>
+                    <option value="gt2">More than 2 years</option>
+                </select>
+                <!-- Hidden fields keep the backend field names unchanged -->
+                <input type="hidden" id="Vehicle_Age_lt_1_Year" name="Vehicle_Age_lt_1_Year" value="0">
+                <input type="hidden" id="Vehicle_Age_gt_2_Years" name="Vehicle_Age_gt_2_Years" value="0">
+            </div>
+
+            <div>
+                <label for="Vehicle_Damage_Yes">Past vehicle damage</label>
+                <select id="Vehicle_Damage_Yes" name="Vehicle_Damage_Yes" required>
+                    <option value="" disabled selected>Choose</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+
+            <button type="submit" id="submit-btn">Predict response</button>
+        </form>
+
+        <form method="get" action="/train" onsubmit="return confirm('Retrain the model? This may take a while.');">
+            <button type="submit" class="train-button">Train model</button>
+        </form>
+
+        {% if context == 'Response-Yes' %}
+            <div class="result yes" role="status">
+                <h2>Likely to buy</h2>
+            </div>
+        {% elif context == 'Response-No' %}
+            <div class="result no" role="status">
+                <h2>Unlikely to buy</h2>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        (function () {
+            var form = document.getElementById('predict-form');
+            var age = document.getElementById('vehicle_age');
+            var lt = document.getElementById('Vehicle_Age_lt_1_Year');
+            var gt = document.getElementById('Vehicle_Age_gt_2_Years');
+            var KEY = 'vehicle-form-v2';
+
+            function syncAge() {
+                lt.value = age.value === 'lt1' ? '1' : '0';
+                gt.value = age.value === 'gt2' ? '1' : '0';
+            }
+            age.addEventListener('change', syncAge);
+
+            // Restore entered values after the page reloads with a result
+            try {
+                var saved = JSON.parse(sessionStorage.getItem(KEY) || '{}');
+                Object.keys(saved).forEach(function (id) {
+                    var el = document.getElementById(id);
+                    if (el) el.value = saved[id];
+                });
+                syncAge();
+            } catch (e) {}
+
+            form.addEventListener('submit', function () {
+                syncAge();
+                try {
+                    var data = {};
+                    form.querySelectorAll('input:not([type=hidden]), select').forEach(function (el) {
+                        data[el.id] = el.value;
+                    });
+                    sessionStorage.setItem(KEY, JSON.stringify(data));
+                } catch (e) {}
+                var b = document.getElementById('submit-btn');
+                b.disabled = true;
+                b.textContent = 'Predicting...';
+            });
+        })();
+    </script>
+</body>
+</html>

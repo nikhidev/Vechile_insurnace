@@ -1,0 +1,167 @@
+/* styles.css — modern restyle, same class names as before */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Figtree:wght@400;500;600&display=swap");
+
+:root {
+    --bg: #eef2f6;
+    --surface: #ffffff;
+    --ink: #14212b;
+    --muted: #5b6b78;
+    --line: #d5dee6;
+    --brand: #0b5d63;
+    --brand-hover: #094a4f;
+    --brand-ink: #ffffff;
+    --train: #2f6f3e;
+    --train-hover: #265b33;
+    --radius: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0e161d;
+        --surface: #16212a;
+        --ink: #e8eef3;
+        --muted: #93a4b1;
+        --line: #2a3945;
+        --brand: #4fc3c9;
+        --brand-hover: #6fd3d8;
+        --brand-ink: #08262a;
+        --train: #5fd39b;
+        --train-hover: #7fe0b0;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 24px 16px;
+    background-color: var(--bg);
+    color: var(--ink);
+}
+
+.container {
+    width: 100%;
+    max-width: 520px;
+    background-color: var(--surface);
+    padding: 32px 28px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: 0 12px 32px rgba(20, 33, 43, 0.08);
+    text-align: left;
+}
+
+h1 {
+    font-family: "Bricolage Grotesque", "Figtree", sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 24px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+label {
+    display: block;
+    text-align: left;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background-color: var(--bg);
+    color: var(--ink);
+    font: inherit;
+    transition: border-color 0.15s;
+}
+
+input:hover,
+select:hover {
+    border-color: var(--muted);
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+    outline: 3px solid var(--brand);
+    outline-offset: 2px;
+}
+
+button {
+    padding: 13px;
+    background-color: var(--brand);
+    color: var(--brand-ink);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font: 600 1rem "Figtree", sans-serif;
+    transition: background-color 0.15s;
+}
+
+button:hover {
+    background-color: var(--brand-hover);
+}
+
+button:disabled {
+    opacity: 0.7;
+    cursor: progress;
+}
+
+.train-button {
+    background-color: transparent;
+    color: var(--train);
+    border: 1.5px solid var(--train);
+    margin-top: 16px;
+    width: 100%;
+}
+
+.train-button:hover {
+    background-color: var(--train);
+    color: var(--brand-ink);
+}
+
+.result {
+    margin-top: 24px;
+    padding: 18px 20px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    background-color: var(--bg);
+}
+
+.result h2 {
+    font-family: "Bricolage Grotesque", "Figtree", sans-serif;
+    font-size: 1.4rem;
+    color: var(--brand);
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 24px 18px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+}
